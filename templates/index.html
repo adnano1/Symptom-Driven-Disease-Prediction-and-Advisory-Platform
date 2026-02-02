@@ -3,10 +3,13 @@
   <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MediPredict</title>
+  <title>MediCura - Symptom-Driven Disease Prediction and Advisory Platform</title>
 
   <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Choices.js CSS for enhanced dropdown -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -15,7 +18,7 @@
   <style>
     body {
       font-family: 'Poppins', sans-serif;
-      background: #F8FAFC;
+      background: linear-gradient(135deg, #FFF5F7 0%, #FFFFFF 100%);
     }
 
     .result-btn {
@@ -35,22 +38,166 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     }
 
-    .disease { background: linear-gradient(135deg, #EF4444, #F87171); }
+    .disease { background: linear-gradient(135deg, #DB2777, #EC4899); }
     .description { background: linear-gradient(135deg, #2563EB, #60A5FA); }
     .precaution { background: linear-gradient(135deg, #F59E0B, #FCD34D); color:#1E293B; }
     .medication { background: linear-gradient(135deg, #8B5CF6, #C4B5FD); }
     .workout { background: linear-gradient(135deg, #22C55E, #86EFAC); color:#1E293B; }
     .diet { background: linear-gradient(135deg, #14B8A6, #5EEAD4); color:#1E293B; }
+
+    .muted-note { color: #475569; font-size: 0.95rem; }
+    .card-hero { background: white; }
+
+    /* Enhanced Choices.js styling */
+    .choices {
+      margin-bottom: 0;
+    }
+
+    .choices__inner {
+      background-color: white;
+      border: 2px solid #F3D8E8;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(219, 39, 119, 0.05);
+    }
+
+    .choices__inner:focus-within {
+      border-color: #DB2777;
+      box-shadow: 0 0 0 3px rgba(219, 39, 119, 0.1);
+    }
+
+    .choices__list--multiple .choices__item {
+      background: linear-gradient(135deg, #DB2777, #EC4899);
+      color: white;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-weight: 500;
+      margin-right: 8px;
+      margin-bottom: 8px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .choices__list--dropdown {
+      border: none;
+      border-radius: 12px;
+      margin-top: 8px;
+      box-shadow: 0 10px 30px rgba(219, 39, 119, 0.15);
+      max-height: 350px;
+      overflow-y: auto;
+      animation: dropDown 0.3s ease;
+    }
+
+    @keyframes dropDown {
+      from {
+        opacity: 0;
+        transform: translateY(-15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .choices__list--dropdown .choices__item {
+      padding: 12px 16px;
+      color: #1E293B;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .choices__list--dropdown .choices__item--selectable:hover {
+      background-color: #FFF5F7;
+      color: #DB2777;
+      padding-left: 20px;
+    }
+
+    .choices__list--dropdown .choices__item--selectable.is-highlighted {
+      background-color: #DB2777;
+      color: white;
+    }
+
+    .choices__input {
+      background-color: white;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+    }
+
+    /* Results Modal Flash Animation */
+    .results-modal.show .modal-dialog {
+      animation: popupFlash 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes popupFlash {
+      0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(50px);
+      }
+      70% {
+        transform: scale(1.05);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Small responsive tweaks so the dataset notice wraps nicely */
+    .dataset-notice { font-size: 0.90rem; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    @media (max-width: 576px) {
+      .dataset-notice { display: none; }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #DB2777, #EC4899);
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #C71e64, #DB2777);
+    }
+
+    h1 {
+      color: #DB2777;
+    }
+
+    h3 {
+      color: #DB2777;
+    }
+
+    p {
+      color: #4B5563;
+    }
+
+    .text-muted {
+      color: #94A3B8 !important;
+    }
+
+    .form-label {
+      color: #DB2777;
+    }
   </style>
 
 </head>
 
   <body>
 <!--  this navbar-->
-<nav class="navbar navbar-expand-lg navbar-dark shadow" style="background: linear-gradient(90deg, #2563EB, #14B8A6);">
+<nav class="navbar navbar-expand-lg navbar-dark shadow" style="background: linear-gradient(90deg, #DB2777, #EC4899);">
 
   <div class="container-fluid">
-    <a class="navbar-brand fw-bold text-white fs-3" href="#">🩺 MediPredict</a>
+    <a class="navbar-brand fw-bold text-white fs-3" href="#">🩺 MediCura</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -72,42 +219,52 @@
           <a class="nav-link" href="/blog">Blog</a>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+
+      <!-- Replaced search with dataset notice + Terms button -->
+      <div class="d-flex align-items-center">
+        <div class="dataset-notice me-3">
+          Recommendations and assistance provided by <strong>Metropolis Labs, Darbhanga</strong>
+        </div>
+        <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#datasetModal">Dataset Terms</button>
+      </div>
+
     </div>
   </div>
 </nav>
 
 
 <h1 class="text-center fw-bold my-4 text-primary">
-  🩺 Not Feeling Well? Let MediPredict Help you
+  🩺 Not Feeling Well? Let MediCura Help you
 </h1>
 
 <div class="container my-5">
-  <div class="card shadow-lg p-5 border-0 rounded-4">
+  <div class="card shadow-lg p-5 border-0 rounded-4 card-hero">
 
     <h3 class="text-center mb-3 fw-bold text-primary">
       🧠 AI Health Diagnosis
     </h3>
 
     <p class="text-center text-muted mb-4">
-      Enter your symptoms and let our AI analyze your health condition
+      MediCura is a lightweight, student-built ML web app that maps self-reported symptoms to likely disease classes and provides contextual, non-prescriptive guidance.
     </p>
 
-    <form action="/predict" method="post">
+    <form id="symptomsForm" novalidate>
 
       <div class="mb-4">
-        <label for="symptoms" class="form-label fw-semibold">Symptoms</label>
-        <input
-          type="text"
-          class="form-control form-control-lg"
+        <label for="symptoms" class="form-label fw-semibold">Select Symptoms</label>
+        <select
+          class="form-select form-select-lg"
           id="symptoms"
           name="symptoms"
-          placeholder="e.g. fever, headache, itching, fatigue"
+          multiple
           required
+          placeholder="Choose symptoms..."
         >
+          {% for symptom in available_symptoms %}
+            <option value="{{ symptom }}">{{ symptom.replace('_', ' ').title() }}</option>
+          {% endfor %}
+        </select>
+        <small class="text-muted d-block mt-2">🔍 Search and select multiple symptoms from the list</small>
       </div>
 
       <!-- Transcription output -->
@@ -123,76 +280,61 @@
 
     </form>
 
+    <div class="mt-3 text-end">
+      <small class="text-muted">Built by: Adnan Hashmi, Daksh Khosla, Priyanshu Singh (Academic group project)</small>
+    </div>
+
   </div>
 </div>
 
-
-
-        <!-- Display the transcribed text here -->
-<!--        <div name="mysysms" id="transcription"></div>-->
-
-<!--        {% if message %}-->
-<!--        <p>{{ message }}</p>-->
-<!--        {% endif %}-->
-<!--        <br>-->
-
-<!--        <button type="submit" class="btn btn-danger btn-lg" style="width: 100%; padding: 14px; margin-bottom: 5px;">Predict</button>-->
-    </form>
+<!-- Results Modal Popup -->
+<div class="modal fade results-modal" id="resultsModal" tabindex="-1" aria-labelledby="resultsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background: linear-gradient(90deg, #DB2777, #EC4899); color: white;">
+        <h5 class="modal-title fw-bold" id="resultsModalLabel">🔍 AI Diagnosis Results</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-4 text-center">
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn disease" data-bs-toggle="modal" data-bs-target="#diseaseModal" data-bs-dismiss="modal">🦠 Disease</button>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn description" data-bs-toggle="modal" data-bs-target="#descriptionModal" data-bs-dismiss="modal">📄 Description</button>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn precaution" data-bs-toggle="modal" data-bs-target="#precautionModal" data-bs-dismiss="modal">⚠ Precaution</button>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn medication" data-bs-toggle="modal" data-bs-target="#medicationsModal" data-bs-dismiss="modal">💊 Medicines</button>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn workout" data-bs-toggle="modal" data-bs-target="#workoutsModal" data-bs-dismiss="modal">🏃 Workouts</button>
+          </div>
+          <div class="col-md-6 col-lg-4">
+            <button class="result-btn diet" data-bs-toggle="modal" data-bs-target="#dietsModal" data-bs-dismiss="modal">🥗 Diet</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
-{% if predicted_disease %}
-
-<!-- Results -->
-<h4 class="text-center fw-bold text-primary my-3">
-  🔍 AI Diagnosis Results
-</h4>
-
-<div class="row g-4 mt-4 text-center">
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn disease" data-bs-toggle="modal" data-bs-target="#diseaseModal">🦠 Disease</button>
-  </div>
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn description" data-bs-toggle="modal" data-bs-target="#descriptionModal">📄 Description</button>
-  </div>
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn precaution" data-bs-toggle="modal" data-bs-target="#precautionModal">⚠ Precaution</button>
-  </div>
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn medication" data-bs-toggle="modal" data-bs-target="#medicationsModal">💊 Medicines</button>
-  </div>
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn workout" data-bs-toggle="modal" data-bs-target="#workoutsModal">🏃 Workouts</button>
-  </div>
-
-  <div class="col-md-4 col-lg-2">
-    <button class="result-btn diet" data-bs-toggle="modal" data-bs-target="#dietsModal">🥗 Diet</button>
-  </div>
-
-</div>
-
-
-{% endif %}
 
 <!-- Disease Modal -->
     <div class="modal fade" id="diseaseModal" tabindex="-1" aria-labelledby="diseaseModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: #020606; color:white;"> <!-- Set header background color inline -->
+                <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" style="background-color: #modal-body-color;"> <!-- Set modal body background color inline -->
-                    <p>{{ predicted_disease }}</p>
+                <div class="modal-body">
+                    <p id="diseaseContent"></p>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Description Modal -->
     <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
@@ -200,10 +342,10 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>{{ dis_des }}</p>
+                    <p id="descriptionContent"></p>
                 </div>
             </div>
         </div>
@@ -215,21 +357,14 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul>
-                        {% for i in my_precautions %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
+                    <ul id="precautionContent"></ul>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 
     <!-- Medications Modal -->
     <div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
@@ -237,14 +372,11 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul>
-                        {% for i in medications %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
+                    <ul id="medicationsContent"></ul>
+                    <p class="small muted-note mt-2">Note: Medication suggestions are informational and drawn from curated CSV content. Always consult a healthcare professional before taking medication.</p>
                 </div>
             </div>
         </div>
@@ -252,18 +384,14 @@
 
     <!-- Workouts Modal -->
     <div class="modal fade" id="workoutsModal" tabindex="-1" aria-labelledby="workoutsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" >
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul>
-                        {% for i in workout %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
+                    <ul id="workoutsContent"></ul>
                 </div>
             </div>
         </div>
@@ -275,24 +403,182 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #020606; color:white;">
                     <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <ul>
-                        {% for i in my_diet %}
-                            <li>{{ i }}</li>
-                        {% endfor %}
-                    </ul>
+                    <ul id="dietsContent"></ul>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Dataset Terms Modal -->
+    <div class="modal fade" id="datasetModal" tabindex="-1" aria-labelledby="datasetModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #020606; color:white;">
+            <h5 class="modal-title" id="datasetModalLabel">Dataset Use & Confidentiality Notice</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              <strong>Recommendations and assistance provided by </strong> Metropolis Labs, Darbhanga
+            </p>
+            <p>
+              <strong>Terms & conditions:</strong>
+            </p>
+            <ul>
+              <li>The datasets used in this project have been recommended and assisted to the development team by Metropolis Labs, Darbhanga.</li>
+              <li>These datasets are used <strong>strictly for academic and research purposes</strong> within this project and for project evaluation only.</li>
+              <li>The data is confidential and must not be shared, published, distributed, or otherwise disclosed to third parties without explicit, written permission from Metropolis Labs.</li>
+              <li>Access to the raw datasets is restricted to authorised project members and must be handled in accordance with any data sharing agreement or instructions provided by Metropolis Labs.</li>
+              <li>Any derivative outputs, analyses, or excerpts intended for publication must be cleared with the data provider and should not contain content that breaches confidentiality or reveals sensitive information.</li>
+              <li>By using this application or accessing the dataset, you agree to maintain the confidentiality of the data and to use it only for permitted academic research activities.</li>
+            </ul>
+            <p class="small text-muted">
+              If you have questions about these terms, need an authorised data access, or wish to request permission for broader use, contact the project team.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-
-
-
-
+    <!-- Bootstrap Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    
+    <!-- Choices.js for enhanced dropdown -->
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+    
+    <script>
+      // Initialize Choices.js for symptom dropdown
+      let choicesInstance = new Choices('#symptoms', {
+        removeItemButton: true,
+        searchEnabled: true,
+        searchChoices: true,
+        placeholderValue: 'Search and select symptoms...',
+        noResultsText: 'No symptoms found',
+        itemSelectText: 'Click to select',
+        shouldSort: true,
+        allowHTML: false,
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        choicesInstance.destroy();
+        choicesInstance = new Choices('#symptoms', {
+          removeItemButton: true,
+          searchEnabled: true,
+          searchChoices: true,
+          placeholderValue: 'Search and select symptoms...',
+          noResultsText: 'No symptoms found',
+          itemSelectText: 'Click to select',
+          shouldSort: true,
+          allowHTML: false,
+        });
+
+        // Handle form submission
+        document.getElementById('symptomsForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          const formData = new FormData(this);
+          const symptoms = formData.getAll('symptoms');
+
+          if (symptoms.length === 0) {
+            alert('Please select at least one symptom');
+            return;
+          }
+
+          // Send AJAX request to predict endpoint with proper headers
+          fetch('/predict', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
+          })
+          .then(response => {
+            console.log('Response status:', response.status);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Data received:', data);
+            
+            if (data.error) {
+              alert(data.error);
+              return;
+            }
+
+            // Populate modal data
+            document.getElementById('diseaseContent').textContent = data.predicted_disease;
+            document.getElementById('descriptionContent').textContent = data.dis_des;
+            
+            // Clear and populate precautions
+            const precautionList = document.getElementById('precautionContent');
+            precautionList.innerHTML = '';
+            if (Array.isArray(data.my_precautions)) {
+              data.my_precautions.forEach(p => {
+                if (p && p.trim()) {
+                  const li = document.createElement('li');
+                  li.textContent = p;
+                  precautionList.appendChild(li);
+                }
+              });
+            }
+
+            // Clear and populate medications
+            const medicationsList = document.getElementById('medicationsContent');
+            medicationsList.innerHTML = '';
+            if (Array.isArray(data.medications)) {
+              data.medications.forEach(m => {
+                if (m && m.trim()) {
+                  const li = document.createElement('li');
+                  li.textContent = m;
+                  medicationsList.appendChild(li);
+                }
+              });
+            }
+
+            // Clear and populate workouts
+            const workoutsList = document.getElementById('workoutsContent');
+            workoutsList.innerHTML = '';
+            if (Array.isArray(data.workout)) {
+              data.workout.forEach(w => {
+                if (w && w.trim()) {
+                  const li = document.createElement('li');
+                  li.textContent = w;
+                  workoutsList.appendChild(li);
+                }
+              });
+            }
+
+            // Clear and populate diets
+            const dietsList = document.getElementById('dietsContent');
+            dietsList.innerHTML = '';
+            if (Array.isArray(data.my_diet)) {
+              data.my_diet.forEach(d => {
+                if (d && d.trim()) {
+                  const li = document.createElement('li');
+                  li.textContent = d;
+                  dietsList.appendChild(li);
+                }
+              });
+            }
+
+            // Show results modal with animation
+            const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+            resultsModal.show();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while analyzing symptoms: ' + error.message);
+          });
+        });
+      });
+    </script>
   </body>
 </html>

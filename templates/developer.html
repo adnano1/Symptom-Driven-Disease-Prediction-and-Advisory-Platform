@@ -5,30 +5,117 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Developer</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(135deg, #FFF5F7 0%, #FFFFFF 100%);
+        min-height: 100vh;
+      }
+      h5 {
+        color: #DB2777;
+        font-weight: 700;
+        margin-top: 1.5rem;
+      }
+      h5:first-of-type {
+        margin-top: 0;
+      }
+      h6 {
+        color: #DB2777;
+        font-weight: 700;
+        margin-top: 1.5rem;
+      }
+      p {
+        color: #4B5563;
+        line-height: 1.8;
+      }
+      li {
+        color: #4B5563;
+        margin-bottom: 0.8rem;
+      }
+      strong {
+        color: #DB2777;
+        font-weight: 600;
+      }
+      .back-btn {
+        background: linear-gradient(135deg, #DB2777, #EC4899);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+      }
+      .back-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(219, 39, 119, 0.3);
+        color: white;
+      }
+      .container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(219, 39, 119, 0.1);
+        padding: 3rem;
+      }
+      hr {
+        border-color: #F3D8E8;
+      }
+    </style>
   </head>
   <body>
-   <div class="container my-4 mt-4">
-<h6>    About Our Team: Your AI & ML Engineers
-</h6>
-<h5>Meet the Developers</h5>
+    <div class="container my-4 mt-4">
+      <a href="/" class="btn back-btn">← Back to Home</a>
 
-<p>Hello, We are a Team of 4 members  Kartik,Gitesh,Aishwarya,Manish your AI and Machine Learning Engineers . We are passionate about harnessing the power of technology to make a positive impact on people's lives.
-</p>
-<h5>Our Expertise
-</h5>
-<p>With a strong academic background in computer science and a deep fascination for AI and ML, We have a strong commitment to excellence and a belief that technology should be accessible and beneficial to everyone. Whether it's developing predictive models, creating intelligent algorithms, or designing user-friendly interfaces, we strive for solutions that are both cutting-edge and user-centric.
-</p>
-<h5>A Commitment to Excellence
-</h5>
-<h5>Passion for Health Tech
-</h5>
-<p>The development of [Your Website Name] represents a convergence of my passion for AI and my dedication to improving healthcare accessibility. We believe that AI has the potential to transform the way we approach healthcare, making it more personalized and informative. This platform is a testament to that vision.
-</p>
-<h5>Join Us on this Journey
-</h5>
-<p>We invite you to explore [Your Website Name] and experience firsthand the fusion of AI and healthcare. Together, we can empower individuals with knowledge, promote well-being, and contribute to a brighter and healthier future.
-</p>
-  </div>
+      <h6>About Our Team: Your AI & ML Engineers</h6>
+
+      <h5>Meet the Developers</h5>
+      <p>
+        We are a group of three CDAC students building the <strong>Symptom-Driven Disease Prediction and Advisory Platform</strong> web application - a lightweight ML + Flask system that maps user-reported symptoms to likely disease classes and provides contextual guidance. Our team combines strengths in data preparation, machine learning model training, backend integration, and frontend UI/UX to produce a deployable, explainable prototype.
+      </p>
+
+      <h5>Our Expertise</h5>
+      <p>
+        Our technical stack includes Python, scikit-learn (SVC), NumPy, Pandas, Flask for the backend, Jinja2 templating, and Bootstrap for the frontend. We focus on interpretability (clear binary symptom encoding + CSV lookup tables), efficient model serialization (pickle), and a clean, responsive user interface suitable for demonstrations and academic evaluation.
+      </p>
+
+      <h5>A Commitment to Excellence</h5>
+      <p>
+        We follow a reproducible workflow: data curation → preprocessing & feature engineering → model development (SVC) → evaluation (accuracy, precision, recall, F1, confusion matrices) → serialization and Flask deployment. Quality assurance includes cross-validation, unit/integration checks for model↔server integration, and clear documentation of limitations and ethical considerations.
+      </p>
+
+      <h5>Passion for Health Tech</h5>
+      <p>
+        Our motivation is to create an explainable first-line triage tool for lay users in resource-constrained settings. We emphasise non-prescriptive guidance, transparent model behaviour, and easy deployment so the application can be used for demonstrations, teaching, or pilot testing (not as a clinical diagnostic tool).
+      </p>
+
+      <h5>Join Us on this Journey</h5>
+      <p>
+        We welcome feedback, collaborators for evaluation/pilot studies, and suggestions for improving model robustness or dataset coverage. Below are the developer contacts and role breakdown so you know who to reach out to for specific topics.
+      </p>
+
+      <hr>
+
+      <h6>Core Team</h6>
+      <ul>
+        <li><strong>Adnan Hashmi</strong> - Data preprocessing, feature engineering, model evaluation, documentation and frontend support.</li>
+        <li><strong>Daksh Khosla</strong> - Model training (SVC), hyperparameter tuning, model serialization and Flask backend & API integration.</li>
+        <li><strong>Priyanshu Singh</strong> - Backend integration, frontend UI/UX, result presentation, testing and user-acceptance validation.</li>
+      </ul>
+
+      <h6>Key Deliverables & Where to Find Them</h6>
+      <ul>
+        <li>Model: serialized `svc.pkl` (SVC multi-class classifier) used by the Flask app for predictions.</li>
+        <li>Data & content: CSV lookup tables (descriptions, precautions, medications, diets, workouts) loaded at runtime by the server.</li>
+        <li>Frontend templates: Jinja2 templates for index, about, blog, developer and contact pages (Bootstrap for responsiveness).</li>
+        <li>Documentation: project report, developer guide, and test cases for model↔server integration.</li>
+      </ul>
+
+      <p class="small text-muted">
+        Note: The application is an academic prototype that provides probabilistic suggestions and guidance; it is not a substitute for professional medical diagnosis. See the project synopsis and abstract for design decisions and ethical considerations.
+      </p>
+
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
   </body>
 </html>
