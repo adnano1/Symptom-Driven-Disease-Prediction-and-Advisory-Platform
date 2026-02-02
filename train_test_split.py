@@ -7,6 +7,7 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+import re
 
 # Load Training Dataset
 training_data = pd.read_csv("Datasets/Training.csv")
@@ -33,6 +34,24 @@ disease_to_index = {v: k for k, v in diseases_list.items()}
 print(f"\nTotal Symptoms: {len(symptoms_dict)}")
 print(f"Total Diseases: {len(diseases_list)}")
 
+# Normalize symptom keys for robust matching (handles spaces, punctuation, inconsistent underscores)
+def _normalize(s):
+	# convert to string, lower, replace whitespace with underscore, remove invalid chars, collapse underscores
+	s = re.sub(r'\s+', '_', str(s).strip().lower())
+	s = re.sub(r'[^a-z0-9_]', '_', s)
+	s = re.sub(r'_+', '_', s)
+	return s.strip('_')
+
+# Create normalized mapping from normalized symptom name -> index
+normalized_symptoms = { _normalize(k): v for k, v in symptoms_dict.items() }
+# Feature vector length must cover the largest index present in the dictionary
+feature_len = max(normalized_symptoms.values()) + 1
+print(f"Normalized symptom keys: {len(normalized_symptoms)}")
+print(f"Feature vector length set to: {feature_len}")
+
+# Create normalized mapping for diseases to handle inconsistent spacing/capitalization
+normalized_diseases = { _normalize(v): k for k, v in diseases_list.items() }
+
 # Prepare Features (X) and Labels (y)
 print("\n" + "=" * 80)
 print("PREPROCESSING DATA")
@@ -47,29 +66,40 @@ print(f"Disease column identified as: '{disease_column}'")
 
 # Process each row
 for idx, row in training_data.iterrows():
-    # Create feature vector
-    feature_vector = np.zeros(len(symptoms_dict))
-    
-    # Process each symptom column (all except last column which is disease)
-    for symptom_col in training_data.columns[:-1]:
-        symptom_name = symptom_col.lower().strip()
-        
-        # Map symptom column name to symptoms_dict key
-        if symptom_name in symptoms_dict:
-            if row[symptom_col] == 1:  # If symptom is present
-                feature_vector[symptoms_dict[symptom_name]] = 1
-    
-    X.append(feature_vector)
-    
-    # Get disease label
-    disease = row[disease_column]
-    if disease in disease_to_index:
-        y.append(disease_to_index[disease])
-    else:
-        print(f"Warning: Disease '{disease}' not found in disease mapping")
+	# Create feature vector (size based on max symptom index, not number of keys)
+	feature_vector = np.zeros(feature_len)
+	
+	# Process each symptom column (all except last column which is disease)
+	for symptom_col in training_data.columns[:-1]:
+		symptom_name = symptom_col.lower().strip()
+		norm_name = _normalize(symptom_name)
+		
+		# Map normalized symptom column name to normalized_symptoms key
+		if norm_name in normalized_symptoms:
+			if row[symptom_col] == 1:  # If symptom is present
+				feature_vector[normalized_symptoms[norm_name]] = 1
+	
+	X.append(feature_vector)
+	
+	# Get disease label (normalize/strip to reduce mismatches)
+	disease = str(row[disease_column]).strip()
+	disease_norm = _normalize(disease)
+	if disease_norm in normalized_diseases:
+		y.append(normalized_diseases[disease_norm])
+	else:
+		# mark unknown labels as -1 and warn (will be removed later)
+		print(f"Warning: Disease '{disease}' not found in disease mapping")
+		y.append(-1)
 
+# Convert to arrays and remove rows with unknown disease labels (ensures consistent lengths)
 X = np.array(X)
 y = np.array(y)
+mask = y != -1
+if not mask.all():
+	removed = np.sum(~mask)
+	print(f"Removed {removed} rows with unknown disease labels")
+X = X[mask]
+y = y[mask]
 
 print(f"Feature matrix shape: {X.shape}")
 print(f"Label vector shape: {y.shape}")
